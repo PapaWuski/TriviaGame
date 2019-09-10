@@ -1,4 +1,3 @@
-
 const game = [
   {
     question: "What does CPU stand for?",
@@ -80,13 +79,13 @@ const game = [
   }
 ];
 
-var current = 0;
-
+let current = 0;
+let right = 0
 // Timeing group
 let countDown;
 const timeOut = 30;
-var quizRunning = false;
-var time = 0;
+let quizRunning = false;
+let time = 0;
 const reset = () => {
   time = 0;
 };
@@ -97,18 +96,18 @@ const start = () => {
   }
 };
 const stop = () => {
-  console.log("Stoped")
   clearInterval(countDown);
   quizRunning = false;
   reset()
+  current++;
+  nextQuestion();
 };
 
 const count = () => {
   time++;
   $(".timer").text(timeConverter(time));
   if (time === timeOut) {
-    stop();
-    loadNextScreen();
+    resultScreen(false)
   }
 };
 
@@ -143,12 +142,12 @@ const loadQuestion = () => {
   $container.append(
     $row
       .clone()
-      .append($col.clone().append(`<h2 class="timer">${timeOut} Seconds</h2>`))
+      .append($col.clone().addClass("m-3").append(`<h2 class="timer">${timeOut} Seconds</h2>`))
   );
   $container.append(
     $row
       .clone()
-      .append($col.clone().append(`<h1>${game[current].question}</h1>`))
+      .append($col.clone().addClass("m-3").append(`<h1>${game[current].question}</h1>`))
   );
   game[current].choices.forEach(choice => {
     let $choice = $("<h2>")
@@ -161,21 +160,44 @@ const loadQuestion = () => {
 
 const nextQuestion = () => {
   $(".container").empty();
+  if (current===game.length){
+    console.log("over")
+  }else{
   start();
   loadQuestion();
+  }
 };
 
 const checkChoice = e => {
-  console.log(e.target);
+  console.log($(e.target).val());
   if ($(e.target).val()) {
-    console.log("correct");
+    resultScreen(true)
+    right++;
   } else {
-    console.log("wrong");
+    resultScreen(false)
   }
-  stop()
-  current++;
-  nextQuestion();
 };
+
+const resultScreen = bool => {
+  $(".container").empty();
+  const $row = $(`<div>`).addClass(`row`);
+  const $col = $(`<div>`).addClass(`col-md-12 text-center`);
+  if (bool){
+    const correctHeader = `<h1>Correct!</h1>`
+    const correctImg = `<img class="img-thumbnail" src="./assets/images/${current}.jpg"/>`
+  $(".container").append($row.clone().addClass("m-3").append($col.clone().append(correctHeader)));
+  $(".container").append($row.clone().append($col.clone().append(correctImg)));
+  }else{
+    const wrongHeader= `<h1>Wrong!</h1>`
+    const wrongText =  `<h2>The correct choice was ${game[current].correct_answer}!</h2>`
+    const wrongImg = `<img class="img-thumbnail" src="./assets/images/${current}.jpg"/>`
+    $(".container").append($row.clone().addClass("mt-3").append($col.clone().append(wrongHeader)));
+    $(".container").append($row.clone().addClass("mb-3").append($col.clone().append(wrongText)));
+    $(".container").append($row.clone().append($col.clone().append(wrongImg)));
+
+  }
+  setTimeout(stop,5000)
+}
 
 createStartPage();
 $(document).on("click", ".quizStart", nextQuestion);
