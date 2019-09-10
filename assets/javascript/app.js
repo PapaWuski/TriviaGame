@@ -118,7 +118,7 @@ const timeConverter = t => {
 
 // Game group
 const createStartPage = () => {
-  const $container = $(`.container`);
+  const $container = $(`.container `);
   const $row = $(`<div>`).addClass(`row`);
   const $col = $(`<div>`).addClass(`col-md-12 text-center`);
   let $title = $(`<h1>`);
@@ -126,9 +126,9 @@ const createStartPage = () => {
 
   $($title).text("Trivia Game!");
   $($start).text("Start Quiz~");
-  $($start).addClass("quizStart");
+  $($start).addClass("quizStart btn-primary btn-lg");
 
-  $title = $row.clone().append($col.clone().append($title));
+  $title = $row.clone().append($col.clone().addClass("my-5").append($title));
   $start = $row.clone().append($col.clone().append($start));
 
   $container.append($title, $start);
@@ -161,7 +161,7 @@ const loadQuestion = () => {
 const nextQuestion = () => {
   $(".container").empty();
   if (current===game.length){
-    console.log("over")
+    endScreen()
   }else{
   start();
   loadQuestion();
@@ -197,6 +197,19 @@ const resultScreen = bool => {
 
   }
   setTimeout(stop,5000)
+}
+
+const endScreen = ()=>{
+  current = 0
+  $(".container").empty();
+  const $row = $(`<div>`).addClass(`row`);
+  const $col = $(`<div>`).addClass(`col-md-12 text-center`);
+  const wrongHeader= `<h1>Trivia Over!</h1>`
+  const wrongText =  `<h2>you got ${right} out of ${game.length} correct!</h2>`
+  const wrongImg = `<button class="quizStart btn-primary btn-lg">Try again?</button>`
+  $(".container").append($row.clone().addClass("mt-3").append($col.clone().append(wrongHeader)));
+  $(".container").append($row.clone().addClass("mb-3").append($col.clone().append(wrongText)));
+  $(".container").append($row.clone().append($col.clone().append(wrongImg)));
 }
 
 createStartPage();
