@@ -1,0 +1,16 @@
+.choice:hover {
+  background-color: green;
+  color: white;
+}
+body {
+  background-image: url("../images/Matrix-PNG-Image-1.png");
+  background-color: black;
+  background-repeat: repeat-x ;
+}
+
+img{
+    width: 400px;
+}
+.container{
+    background-color: rgb(106, 230, 143)
+}

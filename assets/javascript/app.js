@@ -113,7 +113,7 @@ const timeConverter = t => {
 
 // Game group
 const createStartPage = () => {
-  const $container = $(`.container `).addClass("bg-info my-5 p-3");
+  const $container = $(`.container `).addClass("my-5 p-3");
   const $row = $(`<div>`).addClass(`row`);
   const $col = $(`<div>`).addClass(`col-md-12 text-center`);
   let $title = $(`<h1>`);
