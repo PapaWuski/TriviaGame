@@ -19,24 +19,19 @@ const game = [
     question:
       "All of the following programs are classified as raster graphics editors EXCEPT:",
     correct_answer: "Inkscape",
-    choices: ["Inkscape","GIMP", "Paint.NET",  "Adobe Photoshop"]
+    choices: ["Inkscape", "GIMP", "Paint.NET", "Adobe Photoshop"]
   },
   {
     question:
       "The computer OEM manufacturer Clevo, known for its Sager notebook line, is based in which country?",
     correct_answer: "Taiwan",
-    choices: [
-      "United States",
-      "Germany",
-      "Taiwan",
-      "China"
-    ]
+    choices: ["United States", "Germany", "Taiwan", "China"]
   },
   {
     question:
       "Which of these was the name of a bug found in April 2014 in the publicly available OpenSSL cryptography library?",
     correct_answer: "Heartbleed",
-    choices: [ "Shellshock","Heartbleed", "Corrupted Blood", "Shellscript"]
+    choices: ["Shellshock", "Heartbleed", "Corrupted Blood", "Shellscript"]
   },
   {
     question:
@@ -48,7 +43,7 @@ const game = [
     question:
       "Who is the original author of the realtime physics engine called PhysX?",
     correct_answer: "NovodeX",
-    choices: [ "Ageia", "Nvidia","AMD", "NovodeX"]
+    choices: ["Ageia", "Nvidia", "AMD", "NovodeX"]
   },
   {
     question:
@@ -80,7 +75,7 @@ const game = [
 ];
 
 let current = 0;
-let right = 0
+let right = 0;
 // Timeing group
 let countDown;
 const timeOut = 30;
@@ -98,7 +93,7 @@ const start = () => {
 const stop = () => {
   clearInterval(countDown);
   quizRunning = false;
-  reset()
+  reset();
   current++;
   nextQuestion();
 };
@@ -107,7 +102,7 @@ const count = () => {
   time++;
   $(".timer").text(timeConverter(time));
   if (time === timeOut) {
-    resultScreen(false)
+    resultScreen(false);
   }
 };
 
@@ -118,7 +113,7 @@ const timeConverter = t => {
 
 // Game group
 const createStartPage = () => {
-  const $container = $(`.container `);
+  const $container = $(`.container `).addClass("bg-info my-5 p-3");
   const $row = $(`<div>`).addClass(`row`);
   const $col = $(`<div>`).addClass(`col-md-12 text-center`);
   let $title = $(`<h1>`);
@@ -128,8 +123,18 @@ const createStartPage = () => {
   $($start).text("Start Quiz~");
   $($start).addClass("quizStart btn-primary btn-lg");
 
-  $title = $row.clone().append($col.clone().addClass("my-5").append($title));
-  $start = $row.clone().append($col.clone().append($start));
+  $title = $row.clone().append(
+    $col
+      .clone()
+      .addClass("mt-5")
+      .append($title)
+  );
+  $start = $row.clone().append(
+    $col
+      .clone()
+      .addClass("mb-5")
+      .append($start)
+  );
 
   $container.append($title, $start);
 };
@@ -140,41 +145,47 @@ const loadQuestion = () => {
   const $col = $(`<div>`).addClass(`col-md-12 text-center`);
 
   $container.append(
-    $row
-      .clone()
-      .append($col.clone().addClass("m-3").append(`<h2 class="timer">${timeOut} Seconds</h2>`))
+    $row.clone().append(
+      $col
+        .clone()
+        .addClass("mt-5")
+        .append(`<h2 class="timer">${timeOut} Seconds</h2>`)
+    )
   );
   $container.append(
-    $row
-      .clone()
-      .append($col.clone().addClass("m-3").append(`<h1>${game[current].question}</h1>`))
+    $row.clone().append(
+      $col
+        .clone()
+        .addClass("my-5")
+        .append(`<h1>${game[current].question}</h1>`)
+    )
   );
   game[current].choices.forEach(choice => {
     let $choice = $("<h2>")
       .text(choice)
       .val(choice === game[current].correct_answer ? true : false)
-      .addClass("choice");
+      .addClass("choice mb-3 p-3");
     $container.append($row.clone().append($col.clone().append($choice)));
   });
 };
 
 const nextQuestion = () => {
   $(".container").empty();
-  if (current===game.length){
-    endScreen()
-  }else{
-  start();
-  loadQuestion();
+  if (current === game.length) {
+    endScreen();
+  } else {
+    start();
+    loadQuestion();
   }
 };
 
 const checkChoice = e => {
   console.log($(e.target).val());
   if ($(e.target).val()) {
-    resultScreen(true)
+    resultScreen(true);
     right++;
   } else {
-    resultScreen(false)
+    resultScreen(false);
   }
 };
 
@@ -182,35 +193,67 @@ const resultScreen = bool => {
   $(".container").empty();
   const $row = $(`<div>`).addClass(`row`);
   const $col = $(`<div>`).addClass(`col-md-12 text-center`);
-  if (bool){
-    const correctHeader = `<h1>Correct!</h1>`
-    const correctImg = `<img class="img-thumbnail" src="./assets/images/${current}.jpg"/>`
-  $(".container").append($row.clone().addClass("m-3").append($col.clone().append(correctHeader)));
-  $(".container").append($row.clone().append($col.clone().append(correctImg)));
-  }else{
-    const wrongHeader= `<h1>Wrong!</h1>`
-    const wrongText =  `<h2>The correct choice was ${game[current].correct_answer}!</h2>`
-    const wrongImg = `<img class="img-thumbnail" src="./assets/images/${current}.jpg"/>`
-    $(".container").append($row.clone().addClass("mt-3").append($col.clone().append(wrongHeader)));
-    $(".container").append($row.clone().addClass("mb-3").append($col.clone().append(wrongText)));
+  if (bool) {
+    const correctHeader = `<h1>Correct!</h1>`;
+    const correctImg = `<img class="img-thumbnail" src="./assets/images/${current}.jpg"/>`;
+    $(".container").append(
+      $row
+        .clone()
+        .addClass("my-3")
+        .append($col.clone().append(correctHeader))
+    );
+    $(".container").append(
+      $row.clone().append(
+        $col
+          .clone()
+          .addClass("my-3")
+          .append(correctImg)
+      )
+    );
+  } else {
+    const wrongHeader = `<h1>Wrong!</h1>`;
+    const wrongText = `<h2>The correct choice was ${game[current].correct_answer}!</h2>`;
+    const wrongImg = `<img class="img-thumbnail" src="./assets/images/${current}.jpg"/>`;
+    $(".container").append(
+      $row
+        .clone()
+        .addClass("mt-3")
+        .append($col.clone().append(wrongHeader))
+    );
+    $(".container").append(
+      $row
+        .clone()
+        .addClass("mb-3")
+        .append($col.clone().append(wrongText))
+    );
     $(".container").append($row.clone().append($col.clone().append(wrongImg)));
-
   }
-  setTimeout(stop,5000)
-}
+  setTimeout(stop, 5000);
+};
 
-const endScreen = ()=>{
-  current = 0
+const endScreen = () => {
+  current = 0;
   $(".container").empty();
   const $row = $(`<div>`).addClass(`row`);
   const $col = $(`<div>`).addClass(`col-md-12 text-center`);
-  const wrongHeader= `<h1>Trivia Over!</h1>`
-  const wrongText =  `<h2>you got ${right} out of ${game.length} correct!</h2>`
-  const wrongImg = `<button class="quizStart btn-primary btn-lg">Try again?</button>`
-  $(".container").append($row.clone().addClass("mt-3").append($col.clone().append(wrongHeader)));
-  $(".container").append($row.clone().addClass("mb-3").append($col.clone().append(wrongText)));
+  const wrongHeader = `<h1>Trivia Over!</h1>`;
+  const wrongText = `<h2>you got ${right} out of ${game.length} correct!</h2>`;
+  const wrongImg = `<button class="quizStart btn-primary btn-lg">Try again?</button>`;
+  $(".container").append(
+    $row
+      .clone()
+      .addClass("mt-3")
+      .append($col.clone().append(wrongHeader))
+  );
+  $(".container").append(
+    $row
+      .clone()
+      .addClass("mb-3")
+      .append($col.clone().append(wrongText))
+  );
   $(".container").append($row.clone().append($col.clone().append(wrongImg)));
-}
+};
+
 
 createStartPage();
 $(document).on("click", ".quizStart", nextQuestion);
